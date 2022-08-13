@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "projects": {
+    "bancary-backend": "apps/bancary-backend"
+  }
+}
