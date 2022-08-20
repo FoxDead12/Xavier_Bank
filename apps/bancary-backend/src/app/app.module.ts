@@ -1,11 +1,22 @@
 import { Module } from '@nestjs/common';
-
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { DI } from '../DI';
+import { UserController } from './controllers/user.controller';
+import { BankController } from './controllers/bank.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { OrmConfig } from '../ormconfig';
+import { DataSource } from 'typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [TypeOrmModule.forRoot(OrmConfig as TypeOrmModule), ConfigModule.forRoot()],
+  controllers: [UserController, BankController],
+  providers: [DI],
 })
-export class AppModule {}
+
+export class AppModule {
+
+  constructor(private DI: DI, private dataSource: DataSource) {
+    
+    DI.Build(this.dataSource);
+  }
+}

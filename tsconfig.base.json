@@ -14,7 +14,20 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@bancary-account/bancary-interfaces": [
+        "libs/bancary-interfaces/src/lib/index.ts"
+      ],
+      "@bancary-account/bancary-models": [
+        "libs/bancary-models/src/lib/index.ts"
+      ],
+      "@bancary-account/bancary-styles-models": [
+        "libs/bancary-styles-models/src/lib/index.ts"
+      ],
+      "@bancary-account/bancary-styles-models/apis": [
+        "libs/bancary-styles-models/src/lib/apis/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

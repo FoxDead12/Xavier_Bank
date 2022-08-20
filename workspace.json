@@ -1,6 +1,11 @@
 {
   "version": 2,
   "projects": {
-    "bancary-backend": "apps/bancary-backend"
+    "bancary-backend": "apps/bancary-backend",
+    "bancary-interfaces": "libs/bancary-interfaces",
+    "bancary-mobile": "apps/bancary-mobile",
+    "bancary-mobile-e2e": "apps/bancary-mobile-e2e",
+    "bancary-models": "libs/bancary-models",
+    "bancary-styles-models": "libs/bancary-styles-models"
   }
 }
