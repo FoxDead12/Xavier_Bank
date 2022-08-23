@@ -4,5 +4,4 @@ import { IBaseRepositories } from "./IBaseRepositories";
 
 export interface IUserBankAccountRepository extends IBaseRepositories<IUser, IBankAccount> {
 
-    
 }

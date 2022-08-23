@@ -21,11 +21,11 @@
       "@bancary-account/bancary-models": [
         "libs/bancary-models/src/lib/index.ts"
       ],
+      "@bancary-account/bancary-models/apis": [
+        "libs/bancary-models/src/lib/apis/index.ts"
+      ],
       "@bancary-account/bancary-styles-models": [
         "libs/bancary-styles-models/src/lib/index.ts"
-      ],
-      "@bancary-account/bancary-styles-models/apis": [
-        "libs/bancary-styles-models/src/lib/apis/index.ts"
       ]
     }
   },

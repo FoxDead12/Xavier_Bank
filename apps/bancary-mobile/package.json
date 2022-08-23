@@ -13,6 +13,8 @@
     "@react-navigation/native": "*",
     "@react-navigation/native-stack": "*",
     "axios": "*",
-    "typeorm": "*"
+    "typeorm": "*",
+    "@nestjs/common": "*",
+    "lottie-react-native": "*"
   }
 }

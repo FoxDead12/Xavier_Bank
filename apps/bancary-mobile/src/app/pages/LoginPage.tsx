@@ -1,20 +1,25 @@
-import React, { useRef, useState } from "react";
-import { Text, View, Image, TouchableNativeFeedback, StyleSheet, Animated, Easing, TextInput } from "react-native";
+import React, { useContext, useRef, useState } from "react";
+import { Text, View, Image, TouchableNativeFeedback, StyleSheet, Animated, Easing, TextInput, Keyboard, AsyncStorage } from "react-native";
 import { MainStyleSheet } from "../styles/main.styles";
 import { LoginPageStyleSheet } from "../styles/pages/login.style";
 import { Dimensions } from 'react-native';
 import { XIcon } from "../icons/svgs";
-import { LoginRequest } from "libs/bancary-models/src/lib/apis";
 import { PopUpError } from "../components/PopUpError";
-
+import LottieVeiw  from "lottie-react-native"
+import { COLORS } from "@bancary-account/bancary-styles-models";
+import { AuthContext } from "../context/AuthContext";
+import { LoginRequest } from "@bancary-account/bancary-models/apis";
 
 const windowHeight = Dimensions.get('window').height;
 
 export function LoginPage() {
 
-    const [email, setEmail] = useState<string>();
-    const [password, setPassword] = useState<string>();
+    const {singIn} = useContext(AuthContext);
+
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
+    const [play, setPlay] = useState<boolean>(false);
 
     const fadeAnim = useRef(new Animated.Value(1)).current;
     const transformAnim = useRef(new Animated.Value(windowHeight + windowHeight / 3)).current
@@ -61,12 +66,26 @@ export function LoginPage() {
     async function onLoginClick() {
 
         await setError("")
+        
+        if(email === "" || password === ""){
+            
+            return setError("Fill in all fields!")
+        }
+
         const request = await LoginRequest(email, password);
 
         if(typeof request == "string") {
-            console.log("SUCESSO")
+
+            Keyboard.dismiss();
+            setPlay(true);
+
+            setTimeout(async function () {
+
+                singIn(request);
+              }.bind(this), 1300);
         }
         else{
+
             setError(request.message);
         }
         
@@ -78,6 +97,17 @@ export function LoginPage() {
             
             { error === "" ?  <></> : <PopUpError message={error}/> }
 
+            {play == true ? 
+
+            <View style={{position: 'absolute', flex: 1, width: '100%', height: '100%', backgroundColor: COLORS.BACKGROUND_CONTAINER, zIndex: 4}}>
+                <LottieVeiw
+                    source={require('../animations/success-tick.json')}
+                    autoPlay={true}
+                    loop={false}
+                    style={{zIndex: 4}}
+                /> 
+            </View>
+            : ''}
 
             <View style={StyleSheet.absoluteFill}>
                 <Text style={LoginPageStyleSheet.title}>Welcome to XAVIER BANK </Text>
@@ -129,7 +159,7 @@ export function LoginPage() {
                         secureTextEntry={true}
                     />
 
-                    <TouchableNativeFeedback onPress={onLoginClick}>
+                    <TouchableNativeFeedback onPress={onLoginClick} >
                         <View style={{...LoginPageStyleSheet.inputButton}}>
                             <Text style={[LoginPageStyleSheet.buttonText, {textAlign: 'center'}]}>SIGN IN</Text>
                         </View>

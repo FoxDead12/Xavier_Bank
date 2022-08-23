@@ -1,5 +1,4 @@
 import { CanActivate, createParamDecorator, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import { Observable } from "rxjs";
 import { Request } from "express";
 import { DI } from "../../DI";
 import { Reflector } from "@nestjs/core";
@@ -16,7 +15,7 @@ export class TokenGuard implements CanActivate  {
         //Buscar o token
         //Verificar se o utilzador existe na base de dados
         const request = context.switchToHttp().getRequest();
-
+        
         try {
 
             const token = request.cookies["token"];

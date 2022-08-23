@@ -3,7 +3,8 @@ export const ENDPOINT = {
     USER: {
         BASE: '/users',
         CREATE: '/create',
-        LOGIN: '/auth'
+        LOGIN: '/auth',
+        GETUSER: '/get'
     },
 
     BANK: {

@@ -1,14 +1,16 @@
 import { EmailInvalidExceptionFilter, WrongPasswordExceptionFilter } from "@bancary-account/bancary-models";
-import { Body, Controller, Post, UseFilters } from "@nestjs/common";
+import { Body, Controller, Post, UseFilters, UseGuards } from "@nestjs/common";
 import { DI } from "../../DI";
 import { ENDPOINT } from "../../end-points";
-import { Token } from "../guards/token.guard";
+import { Token, TokenGuard } from "../guards/token.guard";
+import { BaseController } from "./base.controller";
 
 @Controller(ENDPOINT.USER.BASE)
-export class UserController {
+export class UserController extends BaseController{
 
-    constructor(private readonly DI: DI){}
-
+    constructor(DI: DI){
+        super(DI);
+    }
     @Post(ENDPOINT.USER.CREATE)
     CreatNewUser(@Body() body) {
 
@@ -22,5 +24,14 @@ export class UserController {
 
         const service = this.DI._factoryService.IUserService;
         return service.Login(body.email, body.password);
+    }
+
+    @Post(ENDPOINT.USER.GETUSER)
+    @UseGuards(TokenGuard)
+    GetUser(@Token() token) {
+
+        const userId = this.DecryptToken(token).userId;
+        const service = this.DI._factoryService.IUserService;
+        return service.GetUser(userId);
     }
 }

@@ -1,7 +1,8 @@
-import { IBankAccountRepository, IFactoryRepositorys, IUserBankAccountRepository, IUserRepository } from "@bancary-account/bancary-interfaces";
+import { IBankAccountRepository, IBankAccountUserRepository, IFactoryRepositorys, IUserBankAccountRepository, IUserRepository } from "@bancary-account/bancary-interfaces";
 import { DtoBankAccount, DtoUser, DtoUserBankAccount } from "@bancary-account/bancary-models";
 import { DataSource, QueryRunner } from "typeorm";
 import { BankAccountRepository } from "../repo/BankAccountRepository";
+import { BankAccountUserRepository } from "../repo/BankAccountUserRepository";
 import { UserBankAccountRepository } from "../repo/UserBankAccountRepository";
 import { UserRepository } from "../repo/UserRepository";
 
@@ -12,11 +13,11 @@ export class FactoryRepositorys implements IFactoryRepositorys {
     constructor(
         private dataSource: DataSource,
     ){}
-
+    
     protected _runners: {[key: string]: QueryRunner} = {};
-
+    
     get IUserRepository(): IUserRepository {
-
+        
         return new UserRepository(this.dataSource.getRepository(DtoUser), this._runners, this._transaction);
     }
 
@@ -29,9 +30,13 @@ export class FactoryRepositorys implements IFactoryRepositorys {
 
         return new UserBankAccountRepository(this.dataSource.getRepository(DtoUserBankAccount), this._runners, this._transaction);
     }
-
-
-
+    
+    get IBankAccountUserRepository(): IBankAccountUserRepository {
+        
+        return new BankAccountUserRepository(this.dataSource.getRepository(DtoUserBankAccount), this._runners, this._transaction);
+    }
+    
+    
     public async BeginChanges(transactionId: string): Promise<void> {
         this._transaction = transactionId;
         this._runners[transactionId] = this.dataSource.createQueryRunner();

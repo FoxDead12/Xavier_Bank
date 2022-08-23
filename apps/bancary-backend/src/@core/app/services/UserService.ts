@@ -1,5 +1,5 @@
-import { IFactoryDomain, IFactoryRepositorys, IFactoryService, IHelper, IUserService } from "@bancary-account/bancary-interfaces";
-import { EmailInvalidException, WrongPasswordException } from "@bancary-account/bancary-models";
+import { IFactoryDomain, IFactoryRepositorys, IFactoryService, IHelper, IUser, IUserService } from "@bancary-account/bancary-interfaces";
+import { EmailInvalidException, GetUserView, WrongPasswordException } from "@bancary-account/bancary-models";
 import { DataSource } from "typeorm";
 import { BaseService } from "./BaseService";
 
@@ -10,7 +10,7 @@ export class UserService extends BaseService implements IUserService {
         
         super(factoryService, factoryDomain, factoryRepository, dataSource, helper)
     }
-    
+
     async CreateNewUser(email: string, password: string, name: string, dataNascimento: Date, nacionalidade: string): Promise<void> {
         
         await this.Transaction(async (transaction) => {
@@ -55,4 +55,31 @@ export class UserService extends BaseService implements IUserService {
 
         return queryResult;
     }
+
+    async GetUser(userId: number): Promise<GetUserView> {
+
+        let queryResult: GetUserView;
+
+        await this.Transaction(async (transaction) => {
+
+            const user = await this.factoryRepository.IUserRepository.GetById(userId);
+            if(!user) throw new Error("User Doesn´t Exist!");
+
+            const bank = await this.factoryRepository.IBankAccountUserRepository.GetEntityBy(null, {id: userId} as IUser);
+            if(!bank) throw new Error("User Dont Have Bank Account!");
+            
+            queryResult = {
+
+                bank: {
+                    account_number: bank.account_number,
+                    balance: bank.balance
+                },
+                email: user.email,
+                name: user.name
+            }
+        })
+
+        return queryResult;
+    }
+    
 }

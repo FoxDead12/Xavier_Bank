@@ -1,13 +1,10 @@
 import { IBankAccount, IMapper, IUser, IUserBankAccountRepository } from "@bancary-account/bancary-interfaces";
 import { DtoBankAccount, DtoUser, DtoUserBankAccount } from "@bancary-account/bancary-models";
 import { QueryRunner, Repository } from "typeorm";
-import { DtoUserToIUser, IUserToDtoUser } from "../mappers";
 import { BaseRepository } from "./BaseRepository";
 
 export class UserBankAccountRepository extends BaseRepository<DtoUserBankAccount> implements IUserBankAccountRepository {
     
-    private dtoToEntity: IMapper<DtoUser, IUser>;
-    private entityToDto: IMapper<IUser, DtoUser>;
 
     constructor(
         repository: Repository<DtoUserBankAccount>,
@@ -15,8 +12,6 @@ export class UserBankAccountRepository extends BaseRepository<DtoUserBankAccount
         transactionId: string
     ){
         super(repository, runners, transactionId);
-        this.dtoToEntity = new DtoUserToIUser();
-        this.entityToDto = new IUserToDtoUser();
     }
 
 
@@ -24,16 +19,11 @@ export class UserBankAccountRepository extends BaseRepository<DtoUserBankAccount
         throw new Error("Method not implemented.");
     }
 
-    async GetEntityBy(entity: Partial<IUser>, source?: IBankAccount): Promise<IUser> {
+    GetEntityBy(entity: Partial<IUser>, source?: IBankAccount): Promise<IUser> {
 
-        const result = await this._repository.findOneBy({user: entity});
-        if(result) {
-
-            return this.dtoToEntity.Map(result.user);
-        }
-
-        return null;
+        throw new Error("Method not implemented.");
     }
+
 
     async Add(entity: IUser, source?: IBankAccount): Promise<void> {
 
